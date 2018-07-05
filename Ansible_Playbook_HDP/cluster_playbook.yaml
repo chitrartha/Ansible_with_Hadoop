@@ -1,0 +1,57 @@
+#https://serversforhackers.com/c/an-ansible2-tutorial
+---
+
+
+#NAMENODE  (remove SECONDARY_NAMENODE if any)
+
+#JOURNALNODE has to be all the nodes which has namenodes.
+
+#The fs.defaultFS was changed to node1:8020[if given cluster namespace, the other services gives error java.io.IOException: Incomplete HDFS URI, no host: hdfs://hdp_cluster]
+#and made sure teh active nn is node1.[If active node nn is not node1 than operation read not permitted for namnode in mode standby]. Possible solution name the cluster without underscore.
+
+#Also Mysql in node1 has been installed by Ambari as MYSQL_SERVER, but rpm was downloaded by ansible because of licensing issue.
+#Also the Mysql for ranger, rangerkms, ranger audit..etc.. are used in node2. As all the users, db has to be created by anisble before cluster installation. But since node1 MYSQL_SERVER is already installed in cluster installation.
+
+#Change the ranger kms "ranger.ks.jpa.jdbc.url" : "jdbc:mysql://node2/rangerkms" in case rangerkms have issues.
+
+
+- hosts: kdc_server
+  become: true
+  vars_files:
+    - variables.yaml
+  roles:
+      - setup_kerberos_server
+
+
+- hosts: all
+  become: true
+  vars_files:
+    - variables.yaml
+  roles:
+      - prerequisites
+      - setup_kerberos_client
+      - setup_ambari_agent
+
+
+- hosts: DB_server
+  become: true
+  vars_files:
+    - variables.yaml
+  roles:
+      - DB_creation
+
+
+- hosts: ambari_node
+  become: true
+  vars_files:
+    - variables.yaml
+  roles:
+      - DB_creation_only_ambari
+
+- hosts: ambari_node
+  become: true
+  vars_files:
+    - variables.yaml
+  roles:
+      - setup_ambari_server
+      - setup_hdp

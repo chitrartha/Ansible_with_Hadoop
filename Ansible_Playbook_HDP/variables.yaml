@@ -1,0 +1,28 @@
+---
+
+
+
+
+# ambari_repo_url: http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.5.1.0/ambari.repo
+# hdp_repo: http://public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.6.1.0
+# hdp_utils_repo: http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/centos6
+
+
+ambari_repo_url: http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.6.1.5/ambari.repo
+hdp_repo: http://public-repo-1.hortonworks.com/HDP/centos7/2.x/updates/2.6.4.0
+hdp_utils_repo: http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.22/repos/centos7
+
+
+
+realm_name: FIELD.HORTONWORKS.COM
+kdc_domain_name: field.hortonworks.com
+kadmin_user: admin
+kadmin_pass: welcome
+
+kdc_admin_pass: welcome
+kms_master_key_passwd : welcome
+
+installing_platform: HDP
+cluster_name: hdpcluster
+
+CUSTOMER_NAME: DummyCustomer

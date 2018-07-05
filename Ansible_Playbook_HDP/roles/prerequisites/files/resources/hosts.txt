@@ -1,0 +1,2 @@
+172.26.237.46 csur-hdp-2.field.hortonworks.com
+172.26.237.45 csur-hdp-1.field.hortonworks.com

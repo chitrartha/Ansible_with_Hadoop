@@ -1,0 +1,284 @@
+{
+	"configurations": [
+
+		{
+			"knox-env": {
+				"properties_attributes": {},
+				"properties": {
+					"knox_user": "knox",
+					"knox_group": "knox",
+					"knox_pid_dir": "/var/run/knox",
+					"knox_master_secret": "PassW0rd@3rtGf"
+				}
+			}
+		},
+		{
+			"yarn-site": {
+				"properties_attributes": {},
+				"properties": {
+					"yarn.nodemanager.resource.memory-mb": "3520",
+					"yarn.scheduler.maximum-allocation-vcores": "2"
+				}
+			}
+		},
+		{
+			"admin-properties": {
+				"properties_attributes": {},
+				"properties": {
+					"DB_FLAVOR": "MYSQL",
+					"audit_db_name": "ranger_audit",
+					"db_name": "ranger",
+					"audit_db_user": "rangerlogger",
+					"SQL_CONNECTOR_JAR": "/usr/share/java/mysql-connector-java.jar",
+					"db_user": "rangerdba",
+					"policymgr_external_url": "http://%HOSTGROUP::host_group_slave%:6080",
+					"db_host": "{{ groups['DB_server'][0] }}:3306",
+					"db_root_user": "root",
+					"db_root_password": "PassW0rd@3rtGf",
+					"audit_db_password": "PassW0rd@3rtGf",
+					"db_password": "PassW0rd@3rtGf"
+				}
+			}
+		},
+		{
+			"ranger-admin-site": {
+				"properties_attributes": {},
+				"properties": {
+					"ranger.jpa.jdbc.url": "jdbc:mysql://{{ groups['slave_nodes'][0] }}/ranger"
+				}
+			}
+		},
+		{
+			"ranger-env": {
+				"properties_attributes": {},
+				"properties": {
+					"xml_configurations_supported": "true",
+					"ranger_user": "ranger",
+					"xasecure.audit.destination.hdfs.dir": "hdfs://{{ groups['slave_nodes'][0] }}:8020/ranger/audit",
+					"create_db_dbuser": "true",
+					"ranger-hdfs-plugin-enabled": "Yes",
+					"ranger_privelege_user_jdbc_url": "jdbc:mysql://{{ groups['slave_nodes'][0] }}:3306",
+					"ranger-knox-plugin-enabled": "No",
+					"is_solrCloud_enabled": "false",
+					"bind_anonymous": "false",
+					"ranger-yarn-plugin-enabled": "Yes",
+					"ranger-kafka-plugin-enabled": "No",
+					"xasecure.audit.destination.hdfs": "true",
+					"ranger-hive-plugin-enabled": "No",
+					"xasecure.audit.destination.solr": "false",
+					"xasecure.audit.destination.db": "true",
+					"ranger_group": "ranger",
+					"ranger_admin_username": "amb_ranger_admin",
+					"ranger_admin_password": "PassW0rd@3rtGf",
+					"ranger-hbase-plugin-enabled": "Yes",
+					"admin_username": "admin"
+				}
+			}
+		},
+		{
+			"kms-properties": {
+				"properties_attributes": {},
+				"properties": {
+					"KMS_MASTER_KEY_PASSWD": "kms_secret",
+					"DB_FLAVOR": "MYSQL",
+					"db_name": "rangerkms",
+					"SQL_CONNECTOR_JAR": "/usr/share/java/mysql-connector-java.jar",
+					"db_user": "rangerkms",
+					"db_host": "{{ groups['DB_server'][0] }}:3306",
+					"db_root_user": "root",
+					"db_root_password": "PassW0rd@3rtGf",
+					"db_password": "PassW0rd@3rtGf",
+					"REPOSITORY_CONFIG_USERNAME": "keyadmin",
+					"ranger.ks.jpa.jdbc.url": "jdbc:mysql://{{ groups['slave_nodes'][0] }}/rangerkms"
+				}
+			}
+		},
+		{
+			"kerberos-env": {
+				"properties_attributes": {
+
+				},
+				"properties": {
+					"realm": "{{ realm_name }}",
+					"kdc_type": "mit-kdc",
+					"kdc_hosts": "{{ groups['kdc_server'][0] }}",
+					"admin_server_host": "{{ groups['kdc_server'][0] }}"
+				}
+			}
+		},
+		{
+			"krb5-conf": {
+				"properties_attributes": {
+
+				},
+				"properties": {
+					"domains": "FIELD.HORTONWORKS.COM",
+					"manage_krb5_conf": "true"
+				}
+			}
+		},
+		{
+			"core-site": {
+				"properties": {
+					"fs.defaultFS": "hdfs://{{ cluster_name }}",
+					"ha.zookeeper.quorum": "%HOSTGROUP::host_group_master%:2181,%HOSTGROUP::host_group_slave%:2181"
+				}
+			}
+		},
+		{
+			"hdfs-site": {
+				"properties": {
+					"dfs.client.failover.proxy.provider.{{ cluster_name }}": "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider",
+					"dfs.ha.automatic-failover.enabled": "true",
+					"dfs.ha.fencing.methods": "shell(/bin/true)",
+					"dfs.ha.namenodes.{{ cluster_name }}": "nn1,nn2",
+					"dfs.namenode.http-address": "%HOSTGROUP::host_group_master%:50070",
+					"dfs.namenode.http-address.{{ cluster_name }}.nn1": "%HOSTGROUP::host_group_master%:50070",
+					"dfs.namenode.http-address.{{ cluster_name }}.nn2": "%HOSTGROUP::host_group_slave%:50070",
+					"dfs.namenode.https-address": "%HOSTGROUP::host_group_master%:50470",
+					"dfs.namenode.https-address.{{ cluster_name }}.nn1": "%HOSTGROUP::host_group_master%:50470",
+					"dfs.namenode.https-address.{{ cluster_name }}.nn2": "%HOSTGROUP::host_group_slave%:50470",
+					"dfs.namenode.rpc-address.{{ cluster_name }}.nn1": "%HOSTGROUP::host_group_master%:8020",
+					"dfs.namenode.rpc-address.{{ cluster_name }}.nn2": "%HOSTGROUP::host_group_slave%:8020",
+					"dfs.namenode.shared.edits.dir": "qjournal://%HOSTGROUP::host_group_master%:8485;%HOSTGROUP::host_group_slave%:8485/{{ cluster_name }}",
+					"dfs.nameservices": "{{ cluster_name }}"
+				}
+			}
+		}
+	],
+	"host_groups": [{
+			"name": "host_group_master",
+			"configurations": [
+
+			],
+			"components": [{
+					"name": "ZOOKEEPER_SERVER"
+				},
+				{
+					"name": "HISTORYSERVER"
+				},
+				{
+					"name": "ZOOKEEPER_CLIENT"
+				},
+				{
+					"name": "NAMENODE"
+				},
+				{
+					"name": "HDFS_CLIENT"
+				},
+				{
+					"name": "YARN_CLIENT"
+				},
+				{
+					"name": "RESOURCEMANAGER"
+				},
+				{
+					"name": "METRICS_MONITOR"
+				},
+				{
+					"name": "MAPREDUCE2_CLIENT"
+				},
+				{
+					"name": "HIVE_SERVER"
+				},
+				{
+					"name": "HIVE_METASTORE"
+				},
+				{
+					"name": "WEBHCAT_SERVER"
+				},
+				{
+					"name": "ZKFC"
+				},
+				{
+					"name": "KERBEROS_CLIENT"
+				},
+				{
+					"name": "MYSQL_SERVER"
+				},
+				{
+					"name": "NODEMANAGER"
+				},
+				{
+					"name": "DATANODE"
+				},
+				{
+					"name": "JOURNALNODE"
+				},
+				{
+					"name": "TEZ_CLIENT"
+				},
+				{
+					"name": "PIG"
+				}
+			],
+			"cardinality": "1"
+		},
+		{
+			"name": "host_group_slave",
+			"configurations": [
+
+			],
+			"components": [{
+					"name": "NODEMANAGER"
+				},
+				{
+					"name": "APP_TIMELINE_SERVER"
+				},
+				{
+					"name": "METRICS_MONITOR"
+				},
+				{
+					"name": "METRICS_COLLECTOR"
+				},
+				{
+					"name": "NAMENODE"
+				},
+				{
+					"name": "DATANODE"
+				},
+				{
+					"name": "HIVE_CLIENT"
+				},
+				{
+					"name": "ZKFC"
+				},
+				{
+					"name": "KERBEROS_CLIENT"
+				},
+				{
+					"name": "JOURNALNODE"
+				},
+				{
+					"name": "RANGER_ADMIN"
+				},
+				{
+					"name": "RANGER_TAGSYNC"
+				},
+				{
+					"name": "RANGER_USERSYNC"
+				},
+				{
+					"name": "RANGER_KMS_SERVER"
+				},
+				{
+					"name": "TEZ_CLIENT"
+				},
+				{
+					"name": "PIG"
+				},
+				{
+					"name": "KNOX_GATEWAY"
+				}
+			]
+		}
+	],
+	"Blueprints": {
+		"security": {
+			"type": "KERBEROS"
+		},
+		"blueprint_name": "two-node-hdp",
+		"stack_name": "HDP",
+		"stack_version": "2.6"
+	}
+}
