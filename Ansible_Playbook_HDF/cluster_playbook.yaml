@@ -1,0 +1,42 @@
+---
+
+
+#The variables if used in blueprint and host ampping must be name .j2.json to pick the values.
+
+##References:
+#https://community.hortonworks.com/articles/173816/automate-deployment-of-hdf-31-clusters-using-ambar.html
+
+#Change the password for the required services when cluster has been deployed.
+
+- hosts: kdc_server
+  become: true
+  vars_files:
+    - variables.yaml
+  roles:
+      - setup_kerberos_server
+
+
+- hosts: all
+  become: true
+  vars_files:
+    - variables.yaml
+  roles:
+      - prerequisites
+      - setup_kerberos_client
+      - setup_ambari_agent
+
+
+- hosts: DB_server
+  become: true
+  vars_files:
+    - variables.yaml
+  roles:
+      - DB_creation
+
+- hosts: ambari_node
+  become: true
+  vars_files:
+    - variables.yaml
+  roles:
+      - setup_ambari_server
+      - setup_hdf

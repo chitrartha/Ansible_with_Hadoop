@@ -1,0 +1,44 @@
+
+- name: Install Ambari Server
+  yum:
+    name: ambari-server
+    state: installed
+  ignore_errors: true
+
+- name: "installing mysql driver to Ambari"
+  yum:
+    name: mysql-connector-java
+    state: present
+  tags: install_mysql_jar
+
+- name: "Adding mysql driver to ambari"
+  shell: ambari-server setup --jdbc-db mysql --jdbc-driver /usr/share/java/mysql-connector-java.jar
+  become: true
+  tags: add_mysql_jar
+
+- name: Download HDF mpack
+  get_url:
+    url: http://public-repo-1.hortonworks.com/HDF/centos7/3.x/updates/3.1.1.0/tars/hdf_ambari_mp/hdf-ambari-mpack-3.1.1.0-35.tar.gz
+    dest: /tmp
+    mode: 0644
+
+- name: Install HDF mpack
+  shell: ambari-server install-mpack --mpack=/tmp/hdf-ambari-mpack-3.1.1.0-35.tar.gz --verbose
+
+
+- name: Setup Ambari Server
+  shell: |
+    ambari-server setup -s
+
+
+- name: Start Ambari Server
+  service:
+    name: ambari-server
+    state: started
+  ignore_errors: true
+
+
+- name: Ensure Ambari Server starts during System Startup
+  service:
+    name: ambari-server
+    enabled: yes

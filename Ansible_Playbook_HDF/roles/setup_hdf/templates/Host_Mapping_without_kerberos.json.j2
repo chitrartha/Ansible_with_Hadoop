@@ -1,0 +1,31 @@
+{
+  "blueprint" : "multi-node-hdf",
+  "default_password" : "PassW0rd@3rtGf",
+  "host_groups" :[
+    {
+      "name" : "host_group_M1",
+      "hosts" : [
+        {
+          "fqdn" : "{{ groups["master_nodes"][0] }}"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_S1",
+      "hosts" : [
+        {
+          "fqdn" : "{{ groups["slave_nodes"][0] }}"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_S2",
+      "hosts" : [
+        {
+          "fqdn" : "{{ groups["slave_nodes"][1] }}"
+        }
+      ]
+    }
+
+  ]
+}

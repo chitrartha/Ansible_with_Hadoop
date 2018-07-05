@@ -1,0 +1,3 @@
+172.26.235.95 csur-hdf-1.field.hortonworks.com
+172.26.235.96 csur-hdf-2.field.hortonworks.com
+172.26.235.97 csur-hdf-3.field.hortonworks.com

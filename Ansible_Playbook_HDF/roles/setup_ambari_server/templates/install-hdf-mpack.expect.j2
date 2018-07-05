@@ -1,0 +1,17 @@
+#!/usr/bin/expect -d
+
+## Install the HDF Mpack
+
+set timeout 180
+
+spawn /usr/sbin/ambari-server install-mpack --mpack=/tmp/hdf-ambari-mpack-3.0.1.0-43.tar.gz --purge
+
+sleep 1
+expect "Are you absolutely sure you want to perform the purge"
+sleep 1
+send "yes\r"
+
+sleep 5
+expect "completed successfully"
+sleep 1
+exit 0

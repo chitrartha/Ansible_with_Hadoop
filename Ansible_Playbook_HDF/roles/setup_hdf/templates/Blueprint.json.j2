@@ -1,0 +1,213 @@
+{
+	"configurations": [{
+			"kerberos-env": {
+				"properties_attributes": {
+
+				},
+				"properties": {
+					"realm": "{{ realm_name }}",
+					"kdc_type": "mit-kdc",
+					"kdc_hosts": "{{ groups['kdc_server'][0] }}",
+					"admin_server_host": "{{ groups['kdc_server'][0] }}"
+				}
+			}
+		},
+		{
+			"krb5-conf": {
+				"properties_attributes": {
+
+				},
+				"properties": {
+					"domains": "{{ realm_name }}",
+					"manage_krb5_conf": "true"
+				}
+			}
+		},
+		{
+			"streamline-common": {
+				"properties_attributes": {
+
+				},
+				"properties": {
+					"streamlineTrustStorePath": "",
+					"jar.storage.type": "local",
+					"database_name": "streamline",
+					"streamline.storage.connector.user": "streamline",
+					"streamline.storage.type": "mysql",
+					"registry.url": "http:\/\/csur-hdf-1.field.hortonworks.com:7788\/api\/v1",
+					"streamline.storage.connector.connectURI": "jdbc:mysql:\/\/csur-hdf-3.field.hortonworks.com:3306\/streamline",
+					"storm.client.home": "\/usr\/hdf\/current\/storm-client",
+					"jar.storage": "\/hdf\/streamline\/jars",
+					"maven.repo.url": "hwx-public^http:\/\/repo.hortonworks.com\/content\/groups\/public\/,hwx-private^http:\/\/nexus-private.hortonworks.com\/nexus\/content\/groups\/public\/",
+					"jar.storage.hdfs.url": "hdfs:\/\/csur-hdf-1.field.hortonworks.com:9090",
+					"httpProxyServer": "",
+					"httpProxyUsername": "",
+					"streamline.storage.query.timeout": "30",
+					"port": "7777",
+					"streamline.dashboard.url": "http:\/\/csur-hdf-1.field.hortonworks.com:9088",
+					"adminPort": "7778",
+					"topology.test.results.dir": "\/hdf\/streamline\/topology_test_results"
+				}
+			}
+		},
+		{
+			"registry-common": {
+				"properties_attributes": {
+
+				},
+				"properties": {
+					"jar.storage.type": "local",
+					"database_name": "registry",
+					"registry.storage.query.timeout": "30",
+					"registry.schema.cache.expiry.interval": "3600",
+					"registry.storage.connector.connectURI": "jdbc:mysql:\/\/csur-hdf-3.field.hortonworks.com:3306\/registry",
+					"jar.storage": "\/hdf\/registry",
+					"registry.storage.connector.user": "registry",
+					"jar.storage.hdfs.url": "hdfs:\/\/csur-hdf-1.field.hortonworks.com:9090",
+					"port": "7788",
+					"adminPort": "7789",
+					"registry.schema.cache.size": "10000",
+					"registry.storage.type": "mysql"
+				}
+			}
+		}
+	],
+	"host_groups": [{
+			"components": [{
+					"name": "KAFKA_BROKER"
+				},
+				{
+					"name": "ZOOKEEPER_SERVER"
+				},
+				{
+					"name": "METRICS_MONITOR"
+				},
+				{
+					"name": "NIFI_MASTER"
+				},
+				{
+					"name": "INFRA_SOLR_CLIENT"
+				},
+				{
+					"name": "LOGSEARCH_LOGFEEDER"
+				},
+				{
+					"name": "ZOOKEEPER_CLIENT"
+				},
+				{
+					"name": "KERBEROS_CLIENT"
+				}
+			],
+			"configurations": [
+
+			],
+			"name": "host_group_S1",
+			"cardinality": "1"
+		},
+		{
+			"components": [{
+					"name": "REGISTRY_SERVER"
+				},
+				{
+					"name": "METRICS_MONITOR"
+				},
+				{
+					"name": "SUPERVISOR"
+				},
+				{
+					"name": "INFRA_SOLR_CLIENT"
+				},
+				{
+					"name": "LOGSEARCH_SERVER"
+				},
+				{
+					"name": "NIFI_CA"
+				},
+				{
+					"name": "ZOOKEEPER_CLIENT"
+				},
+				{
+					"name": "NIFI_REGISTRY_MASTER"
+				},
+				{
+					"name": "ZOOKEEPER_SERVER"
+				},
+				{
+					"name": "AMBARI_SERVER"
+				},
+				{
+					"name": "STREAMLINE_SERVER"
+				},
+				{
+					"name": "NIFI_MASTER"
+				},
+				{
+					"name": "INFRA_SOLR"
+				},
+				{
+					"name": "LOGSEARCH_LOGFEEDER"
+				},
+				{
+					"name": "METRICS_GRAFANA"
+				},
+				{
+					"name": "KERBEROS_CLIENT"
+				}
+			],
+			"configurations": [
+
+			],
+			"name": "host_group_M1",
+			"cardinality": "1"
+		},
+		{
+			"components": [{
+					"name": "ZOOKEEPER_SERVER"
+				},
+				{
+					"name": "STORM_UI_SERVER"
+				},
+				{
+					"name": "METRICS_MONITOR"
+				},
+				{
+					"name": "NIFI_MASTER"
+				},
+				{
+					"name": "INFRA_SOLR_CLIENT"
+				},
+				{
+					"name": "LOGSEARCH_LOGFEEDER"
+				},
+				{
+					"name": "NIMBUS"
+				},
+				{
+					"name": "DRPC_SERVER"
+				},
+				{
+					"name": "ZOOKEEPER_CLIENT"
+				},
+				{
+					"name": "METRICS_COLLECTOR"
+				},
+				{
+					"name": "KERBEROS_CLIENT"
+				}
+			],
+			"configurations": [
+
+			],
+			"name": "host_group_S2",
+			"cardinality": "1"
+		}
+	],
+	"Blueprints": {
+		"security": {
+			"type": "KERBEROS"
+		},
+		"blueprint_name": "multi-node-hdf",
+		"stack_name": "HDF",
+		"stack_version": "3.1"
+	}
+}

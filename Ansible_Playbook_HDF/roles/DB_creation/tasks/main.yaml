@@ -1,0 +1,65 @@
+
+- name: Install wget
+  shell: sudo yum install wget -y
+
+
+- name: Install MySQL 5.7 repo
+  yum: name=https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm state=present
+
+
+- name: Install MySQL
+  become: True
+  yum: package={{ item }}
+  when: ansible_os_family == 'RedHat'
+  with_items:
+    - mysql-community-server
+    - mysql-community-client
+    - MySQL-python
+
+
+- name: Start the MySQL service
+  service: name=mysqld state=started enabled=true
+
+- name: Ensure Mysql Server starts during System Startup
+  service:
+    name: mysqld
+    enabled: yes
+
+
+- name: Change mysql root password and keep track in
+  shell: |
+    password_match=`awk '/A temporary password is generated for/ {a=$0} END{ print a }' /var/log/mysqld.log | awk '{print $(NF)}'`
+    echo $password_match;
+    mysql  -uroot -p$password_match --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY  'PassW0rd@3rtGf'; flush privileges; "
+    echo "[client]
+    user=root
+    password=PassW0rd@3rtGf" > /root/.my.cnf;
+  args:
+    creates: /root/.my.cnf
+  register: change_temp_pass
+  notify: restart mysqld
+
+- meta: flush_handlers
+
+- debug:
+        var: change_temp_pass
+
+
+- name: Create a new database
+  mysql_db:
+      name: "{{ item }}"
+      state: present
+  with_items:
+    - registry
+    - streamline
+
+
+- name: grant priviliges to registry user.
+  mysql_user:
+    name: "{{ item.name }}"
+    host: "{{ item.host }}"
+    password: PassW0rd@3rtGf
+    priv: "*.*:ALL,GRANT"
+  with_items:
+    - { name: "registry" , host: "{{ groups['ambari_node'][0] }}" }
+    - { name: "streamline" , host: "{{ groups['ambari_node'][0] }}" }

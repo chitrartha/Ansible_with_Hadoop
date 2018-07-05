@@ -1,0 +1,31 @@
+---
+
+ambari_repo_url: http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.6.1.0/ambari.repo
+hdf_repo: http://public-repo-1.hortonworks.com/HDF/centos7/3.x/updates/3.1.1.0
+hdf_utils_repo: http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/centos7
+
+
+
+########### HDP conf ###############
+# repo_host: csur-hdf-3.field.hortonworks.com
+# ambari_repo_url: http://{{repo_host}}/ambari/centos7/2.x/updates/2.5.0.3/ambari.repo
+# ambari_repo_base_url: http://{{repo_host}}/ambari/centos7/2.x/updates/2.5.0.3
+# HDP_DB_HOSTS: hdp-ansible-2.field.hortonworks.com
+# hdp_repo: http://{{repo_host}}/HDP/centos7/2.x/updates/2.6.0.3
+# hdp_utils_repo: http://{{repo_host}}/HDP-UTILS-1.1.0.21/repos/centos7
+# hdf_repo: http://{{repo_host}}/HDF/centos7/3.x/updates/3.0.1.0
+# hdf_utils_repo: http://{{repo_host}}/HDP-UTILS-1.1.0.21/repos/centos7
+#####################################
+
+realm_name: FIELD.HORTONWORKS.COM
+kdc_domain_name: field.hortonworks.com
+kadmin_user: admin
+kadmin_pass: welcome
+kdc_hostname: csur-hdf-3.field.hortonworks.com
+kdc_admin_pass: welcome
+kms_master_key_passwd : welcome
+
+installing_platform: HDF
+cluster_name: hdf_cluster
+ldap_host: csur-hdf-3.field.hortonworks.com
+CUSTOMER_NAME: DummyCustomer
